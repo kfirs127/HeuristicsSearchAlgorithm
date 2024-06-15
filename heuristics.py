@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 
+
 class BaseHeuristic:
     def __init__(self, n=11, k=4):
         self._n = n
@@ -24,6 +25,7 @@ class BaseHeuristic:
             gaps.append(gap)
 
         return gaps
+
 
 class HeuristicModel(nn.Module):
     def __init__(self, input_dim):
@@ -90,20 +92,23 @@ class LearnedHeuristic:
     def get_k(self):
         return self._k
 
+
 class BellmanUpdateHeuristic(LearnedHeuristic):
     def __init__(self, n=11, k=4):
         super().__init__(n, k)
-        
+
     def save_model(self):
         super().save_model('bellman_update_heuristic.pth')
 
     def load_model(self):
         super().load_model('bellman_update_heuristic.pth')
 
+
 class BootstrappingHeuristic(LearnedHeuristic):
     def __init__(self, n=11, k=4):
         super().__init__(n, k)
-        
+        self._model = DeepCubeA(n)
+
     def save_model(self):
         super().save_model('bootstrapping_heuristic.pth')
 
