@@ -10,7 +10,7 @@ class Node:
         self.f = f
 
     def __lt__(self, other):
-        return self.f < other.f
+        return self.g < other.g if self.f == other.f else self.f < other.f
 
 
 def BWAS(start, W, B, heuristic_function, T):
@@ -65,8 +65,8 @@ def path_to_goal(n_UB):
     path = []
     current_s, current_p = n_UB.s, n_UB.p
     while current_p is not None:
-        path.append(current_s)
+        path.append(current_s.get_state_as_list())
         current_s = current_p.s
         current_p = current_p.p
-    path.append(current_s)
-    return path
+    path.append(current_s.get_state_as_list())
+    return [path]

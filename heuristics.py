@@ -84,6 +84,12 @@ class LearnedHeuristic:
         self._model.load_state_dict(torch.load(path))
         self._model.eval()
 
+    def get_n(self):
+        return self._n
+
+    def get_k(self):
+        return self._k
+
 class BellmanUpdateHeuristic(LearnedHeuristic):
     def __init__(self, n=11, k=4):
         super().__init__(n, k)

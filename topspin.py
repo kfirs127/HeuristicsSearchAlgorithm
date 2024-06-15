@@ -17,10 +17,7 @@ class TopSpinState:
 
     # we decided to take a random permutation of the possibale actions.
     def get_neighbors(self):
-        lst = [self._flip_rotation(), self._counterclockwise_rotation(), self._clockwise_rotation()]
-        neighbors = lst[:]
-        random.shuffle(neighbors)
-        return neighbors
+        return [self._flip_rotation(), self._clockwise_rotation(), self._counterclockwise_rotation()]
 
     def _clockwise_rotation(self):
         copy_state = self._state.copy()
