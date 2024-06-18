@@ -69,4 +69,5 @@ def path_to_goal(n_UB):
         current_s = current_p.s
         current_p = current_p.p
     path.append(current_s.get_state_as_list())
-    return [path]
+    path = path[::-1]
+    return path

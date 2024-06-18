@@ -28,28 +28,9 @@ def run():
     #     print("unsolvable")
 
 
-    bootstrapping_heuristic = BootstrappingHeuristic(11, 4)
-    bootstrappingTraining(bootstrapping_heuristic)
-    path, expansions = BWAS(start1, 5, 10, bootstrapping_heuristic.get_h_values, 1000000)
-    if path is not None:
-        print(expansions)
-        for vertex in path:
-            print(vertex)
-    else:
-        print("unsolvable")
-
-    path, expansions = BWAS(start2, 5, 10, bootstrapping_heuristic.get_h_values, 1000000)
-    if path is not None:
-        print(expansions)
-        for vertex in path:
-            print(vertex)
-    else:
-        print("unsolvable")
-
-
-    # bellman_heuristic = BellmanUpdateHeuristic(11, 4)
-    # bellmanUpdateTraining(bellman_heuristic)
-    # path, expansions = BWAS(start1, 5, 10, bellman_heuristic.get_h_values, 1000000)
+    # bootstrapping_heuristic = BootstrappingHeuristic(11, 4)
+    # bootstrappingTraining(bootstrapping_heuristic)
+    # path, expansions = BWAS(start1, 5, 10, bootstrapping_heuristic.get_h_values, 1000000)
     # if path is not None:
     #     print(expansions)
     #     for vertex in path:
@@ -57,13 +38,32 @@ def run():
     # else:
     #     print("unsolvable")
     #
-    # path, expansions = BWAS(start2, 5, 10, bellman_heuristic.get_h_values, 1000000)
+    # path, expansions = BWAS(start2, 5, 10, bootstrapping_heuristic.get_h_values, 1000000)
     # if path is not None:
     #     print(expansions)
     #     for vertex in path:
     #         print(vertex)
     # else:
     #     print("unsolvable")
+
+
+    bellman_heuristic = BellmanUpdateHeuristic(11, 4)
+    bellmanUpdateTraining(bellman_heuristic)
+    path, expansions = BWAS(start1, 5, 10, bellman_heuristic.get_h_values, 1000000)
+    if path is not None:
+        print(expansions)
+        for vertex in path:
+            print(vertex)
+    else:
+        print("unsolvable")
+
+    path, expansions = BWAS(start2, 5, 10, bellman_heuristic.get_h_values, 1000000)
+    if path is not None:
+        print(expansions)
+        for vertex in path:
+            print(vertex)
+    else:
+        print("unsolvable")
 
 if __name__ == '__main__':
     run()

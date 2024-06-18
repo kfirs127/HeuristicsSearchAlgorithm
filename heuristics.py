@@ -30,20 +30,22 @@ class BaseHeuristic:
 class HeuristicModel(nn.Module):
     def __init__(self, input_dim):
         super(HeuristicModel, self).__init__()
-        self.fc1 = nn.Linear(input_dim, 64)
-        self.dropout1 = nn.Dropout(0.25)
-        self.fc2 = nn.Linear(64, 32)
-        self.dropout2 = nn.Dropout(0.25)
-        self.fc3 = nn.Linear(32, 16)
-        self.fc4 = nn.Linear(16, 1)
+        self.fc1 = nn.Linear(input_dim, 256)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, 32)
+        self.fc5 = nn.Linear(32, 1)
+        self.dropout = nn.Dropout(0.25)
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
-        x = self.dropout1(x)
+        x = self.dropout(x)
         x = torch.relu(self.fc2(x))
-        x = self.dropout2(x)
+        x = self.dropout(x)
         x = torch.relu(self.fc3(x))
-        x = self.fc4(x)
+        x = self.dropout(x)
+        x = torch.relu(self.fc4(x))
+        x = self.fc5(x)
         return x
 
 class LearnedHeuristic:
@@ -52,7 +54,7 @@ class LearnedHeuristic:
         self._k = k
         self._model = HeuristicModel(n)
         self._criterion = nn.MSELoss()
-        self._optimizer = optim.Adam(self._model.parameters(), lr=0.001)
+        self._optimizer = optim.Adam(self._model.parameters(), lr=1e-4)
 
     def get_h_values(self, states):
         states_as_list = [state.get_state_as_list() for state in states]
@@ -67,8 +69,13 @@ class LearnedHeuristic:
         inputs = np.array(input_as_list, dtype=np.float32)
         outputs = np.array(output_labels, dtype=np.float32)
 
+        print(inputs)
+        print(outputs)
+
+        inputs = (inputs - np.mean(inputs, axis=0)) / np.std(inputs, axis=0)
+
         inputs_tensor = torch.tensor(inputs)
-        outputs_tensor = torch.tensor(outputs).unsqueeze(1)  # Adding a dimension for the output
+        outputs_tensor = torch.tensor(outputs).unsqueeze(1)
 
         for epoch in range(epochs):
             self._model.train()
@@ -76,6 +83,7 @@ class LearnedHeuristic:
 
             predictions = self._model(inputs_tensor)
             loss = self._criterion(predictions, outputs_tensor)
+            torch.nn.utils.clip_grad_norm_(self._model.parameters(), max_norm=1.0)
             loss.backward()
             self._optimizer.step()
 
@@ -107,7 +115,6 @@ class BellmanUpdateHeuristic(LearnedHeuristic):
 class BootstrappingHeuristic(LearnedHeuristic):
     def __init__(self, n=11, k=4):
         super().__init__(n, k)
-        self._model = DeepCubeA(n)
 
     def save_model(self):
         super().save_model('bootstrapping_heuristic.pth')
