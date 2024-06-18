@@ -69,9 +69,6 @@ class LearnedHeuristic:
         inputs = np.array(input_as_list, dtype=np.float32)
         outputs = np.array(output_labels, dtype=np.float32)
 
-        print(inputs)
-        print(outputs)
-
         inputs = (inputs - np.mean(inputs, axis=0)) / np.std(inputs, axis=0)
 
         inputs_tensor = torch.tensor(inputs)

@@ -6,7 +6,7 @@ class Node:
     def __init__(self, s, g, p, f):
         self.s = s
         self.g = g
-        self.p = None if p is None else Node(p.s, p.g, p.p, p.f)
+        self.p = p
         self.f = f
 
     def __lt__(self, other):

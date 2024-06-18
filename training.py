@@ -6,11 +6,11 @@ from BWAS import BWAS
 def bellmanUpdateTraining(bellman_update_heuristic):
     n = bellman_update_heuristic.get_n()
     k = bellman_update_heuristic.get_k()
-    batch_size = 128
+    batch_size = 1024
 
     to_train = {}
 
-    for i in range(64):
+    for i in range(150):
         random_states = _get_k_states(TopSpinState(list(range(1, n + 1)), k), batch_size)
         random.shuffle(random_states)
 
@@ -26,11 +26,10 @@ def bellmanUpdateTraining(bellman_update_heuristic):
                 min_cost = float('inf')
                 for succ in successors:
                     if succ.is_goal():
-                        to_train[random_state] = 1
+                        min_cost = 1
                         break
                     else:
                         h_value = bellman_update_heuristic.get_h_values([succ])[0]
-                        print(h_value)
                         if h_value == float('inf') or h_value == float('nan'):
                             cost = 1 + n * k  # high number.
                         else:
@@ -47,13 +46,13 @@ def bellmanUpdateTraining(bellman_update_heuristic):
 def bootstrappingTraining(bootstrapping_heuristic):
     n = bootstrapping_heuristic.get_n()
     k = bootstrapping_heuristic.get_k()
-    batch_size = 128
+    batch_size = 1024
 
     T = 10000
     T_max = 100000
     to_train = {}
 
-    for i in range(8): # 128 per batch * 32 iterations = 4096 examples
+    for i in range(150): # 128 per batch * 32 iterations = 4096 examples
         print_counter = 1
         does_one_solved = False
 
@@ -65,7 +64,6 @@ def bootstrappingTraining(bootstrapping_heuristic):
             print_counter += 1
 
             path, _ = BWAS(random_state, 5, 10, bootstrapping_heuristic.get_h_values, T)
-            # TODO if we changed the order ot path from start to end - need to change the logic here as well
             if path is not None:
                 does_one_solved = True
                 counter = len(path) - 1

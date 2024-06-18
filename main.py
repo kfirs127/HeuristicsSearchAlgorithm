@@ -16,7 +16,7 @@ def run():
     #         print(vertex)
     # else:
     #     print("unsolvable")
-    #
+
     start2 = TopSpinState(instance_2, 4)
     # BU_heuristic = BaseHeuristic(11, 4)
     # path, expansions = BWAS(start2, 5, 10, BU_heuristic.get_h_values, 1000000)
