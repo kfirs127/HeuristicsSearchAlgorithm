@@ -35,16 +35,15 @@ class HeuristicModel(nn.Module):
         self.fc3 = nn.Linear(128, 64)
         self.fc4 = nn.Linear(64, 32)
         self.fc5 = nn.Linear(32, 1)
-        self.dropout = nn.Dropout(0.25)
+        self.dropout = nn.Dropout(0.5)
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
-        x = self.dropout(x)
         x = torch.relu(self.fc2(x))
         x = self.dropout(x)
         x = torch.relu(self.fc3(x))
-        x = self.dropout(x)
         x = torch.relu(self.fc4(x))
+        x = self.dropout(x)
         x = self.fc5(x)
         return x
 
